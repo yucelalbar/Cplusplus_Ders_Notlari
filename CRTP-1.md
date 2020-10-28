@@ -162,12 +162,13 @@ int main()
 }
 ```
 
-_Pet_ sınıfının private bölümünde tanımlanan
+_Pet_ sınıfının _private_ bölümünde tanımlanan
 
 ```
 const T& thisObject() { return *static_cast<const T*>(this); }
 ```
-işlevi tür dönüştürme kodlarını daha kolay yazabilmemiz için oluşturduğumuz bir yardımcı yalnızca. C++’ın işlev şablonlarına ilişkin önemli bir kuralı da hatırlamanın tam zamanı. Bir işlev çağrısı yapılmadığı sürece derleyici bir işlev şablonundan ya da sınıf şablonunun üye işlevinden bir kod üretmeyecek.  getSound işlevlerinin kodunun üretilmesini tetikleyen main işlevi içinde yapılan çağrılar:
+
+işlevi tür dönüştürme kodlarını daha kolay yazabilmemiz için oluşturduğumuz bir yardımcı yalnızca. _C++_'ın fonksiyon şablonlarına ilişkin önemli bir kuralını da hatırlamanın tam zamanı. Bir fonksiyon çağrısı yapılmadığı sürece derleyici bir fonksiyon şablonundan ya da sınıf şablonunun üye fonksiyonundan bir kod üretmeyecek. _getSound_ fonksiyonlarının kodunun üretilmesini tetikleyen _main_ fonksiyonu içinde yapılan çağrılar:
 
 mycat.makeSound();
 mydog.makeSound();
