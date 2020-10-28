@@ -49,12 +49,13 @@ Dikkatimizi çekmesi gereken ikinci bir nokta da taban sınıfın _interface_ ü
 static_cast<Derived *>(this)
 ```
 
-Dilin kurallarına göre bu dönüşümün geçerli  olabilmesi için Base ve Derived sınıflarının aynı hiyerarşi içinde bulunması gerekiyor. Bu dönüşümle Base sınıfı türünden nesnenin adresini (Derived *) türüne dönüştürüyor ve tür dönüştürme işlecinden elde edilen adresle türemiş sınıfının implementation isimli işlevi çağırıyoruz. Derleyici bu durumda implementation ismini türemiş sınıfın isim alanında arıyor.
+Dilin kurallarına göre bu dönüşümün geçerli olabilmesi için _Base_ ve _Derived_ sınıflarının aynı hiyerarşi içinde bulunması gerekiyor. Bu dönüşümle _Base_ sınıfı türünden nesnenin adresini (Derived *) türüne dönüştürüyor ve tür dönüştürme operatöründen elde edilen adresle türemiş sınıfının _implementation_ isimli fonksiyonunu çağırıyoruz. Derleyici bu durumda _implementation_ ismini türemiş sınıfın isim alanında arıyor.
 
-Bu teknik dinamik çok biçimliliğin maliyetinden kaçınarak ve çoğu zaman ilave esneklik kazandırarak sanal işlevlerin etkilerine benzer bir yapı oluşturuyor. CRTP‘nin bu özel kullanımı bazı kişiler tarafından “statik çokbiçimlilik” ya da “simüle edilmiş dinamik bağlama” olarak isimlendiriliyor. Windows’un ATL ve WTL kütüphanelerinde bu teknik yoğun olarak kullanılıyor. Tekniği anlamak için, sanal işlevleri olmayan bir sınıfı kafanızda canlandırın. Taban sınıf başka işlevleri kendi öğe işlevleri yoluyla çağırıyor. Taban sınıftan bir türetme yaptığımızda taban sınıfın tüm veri öğelerini ve öğe işlevlerini kalıtım yoluyla almış oluyoruz.
+Bu teknik dinamik çok biçimliliğin maliyetinden kaçınarak ve çoğu zaman ilave esneklik kazandırarak sanal işlevlerin etkilerine benzer bir yapı oluşturuyor. __CRTP__'nin bu özel kullanımı bazı kişiler tarafından _"statik çok biçimlilik"_ ya da _"simüle edilmiş dinamik bağlama"_ olarak isimlendiriliyor. _Windows_'un _ATL_ ve _WTL_ kütüphanelerinde bu teknik yoğun olarak kullanılıyor. Tekniği anlamak için, sanal fonksiyonları olmayan bir sınıfı kafanızda canlandırın. Taban sınıf başka fonksiyonları kendi üye fonksiyonları yoluyla çağırıyor. Taban sınıftan bir türetme yaptığımızda taban sınıfın tüm veri elemanlarını ve üye fonksiyonlarını kalıtım yoluyla almış oluyoruz.
 
 Şimdi bir örnek üzerinde dinamik çokbiçimliliği statik çok biçimliliğe dönüştürelim. Aşağıdaki gibi bir dinamik çokbiçimliliğe sahip sınıf hiyerarşimiz olsun:
 
+```
 #include <iostream>
 #include <string>
 
@@ -101,106 +102,12 @@ int main()
 
 	mycat.makeSound();
 	mydog.makeSound();
-
 }
-1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-13
-14
-15
-16
-17
-18
-19
-20
-21
-22
-23
-24
-25
-26
-27
-28
-29
-30
-31
-32
-33
-34
-35
-36
-37
-38
-39
-40
-41
-42
-43
-44
-45
-46
-47
-48
-#include <iostream>
-#include <string>
+```
  
-using namespace std;
- 
-class Pet
-{
-public:
-	void makeSound()
-	{
-		std::cout << getSound() << endl;
-	}
- 
-	virtual std::string getSound() const = 0;
-};
- 
-class Dog : public Pet
-{
-public:
-	virtual std::string getSound() const override
-	{
-		return{ "hav hav" };
-	}
-};
- 
-class Cat : public Pet
-{
-public:
-	virtual std::string getSound() const override
-	{
-		return{ "miyav miyav" };
-	}
-};
- 
-void petFunc(Pet &r)
-{
-	r.makeSound();
-}
- 
-int main()
-{
-	Cat mycat;
-	Dog mydog;
- 
-	mycat.makeSound();
-	mydog.makeSound();
- 
-}
 Şimdi bu yapıyı CRTP örüntüsüne dönüştürelim:
 
+```
 #include <iostream>
 #include <string>
 
@@ -252,119 +159,14 @@ int main()
 
 	gfunc(mycat);
 	gfunc(mydog);
+}
+```
 
-}
-1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-13
-14
-15
-16
-17
-18
-19
-20
-21
-22
-23
-24
-25
-26
-27
-28
-29
-30
-31
-32
-33
-34
-35
-36
-37
-38
-39
-40
-41
-42
-43
-44
-45
-46
-47
-48
-49
-50
-51
-52
-53
-#include <iostream>
-#include <string>
- 
-using namespace std;
- 
-template <typename T>
-class Pet
-{
-	const T& thisObject() { return *static_cast<const T*>(this); }
- 
-public:
-	void makeSound()
-	{
-		std::cout << thisObject().getSound() << "\n";
-	}
- 
-	// Sanal bir işlev bildirilmiyor. Ancak bu sınıf şablonu T türüne ilişkin 
-	// std::string T::getSound() const" imzalı bir işlev bulunacağına göre yazılıyor.
-};
- 
-class Dog : public Pet<Dog> // Şablon tür parametresine dikkat
-{
-public:
-	std::string getSound() const
-	{
-		return{ "hav hav" };
-	}
-};
- 
-class Cat : public Pet<Cat>   //şablon tür parametresine dikkat
-{
-public:
-	std::string getSound() const
-	{
-		return{ "miyav miyav" };
-	}
-};
- 
-template<typename T>
-void gfunc(Pet<T> &r)
-{
-	r.makeSound();
-}
- 
-int main()
-{
-	Cat mycat;
-	Dog mydog;
- 
-	gfunc(mycat);
-	gfunc(mydog);
- 
-}
-Pet sınıfının private bölümünde tanımlanan
+_Pet_ sınıfının private bölümünde tanımlanan
 
+```
 const T& thisObject() { return *static_cast<const T*>(this); }
-1
-const T& thisObject() { return *static_cast<const T*>(this); }
+```
 işlevi tür dönüştürme kodlarını daha kolay yazabilmemiz için oluşturduğumuz bir yardımcı yalnızca. C++’ın işlev şablonlarına ilişkin önemli bir kuralı da hatırlamanın tam zamanı. Bir işlev çağrısı yapılmadığı sürece derleyici bir işlev şablonundan ya da sınıf şablonunun üye işlevinden bir kod üretmeyecek.  getSound işlevlerinin kodunun üretilmesini tetikleyen main işlevi içinde yapılan çağrılar:
 
 mycat.makeSound();
