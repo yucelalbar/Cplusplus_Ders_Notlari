@@ -7,6 +7,7 @@ Bellek kullanımı açısından baktığımızda da her sınıf nesnesinde bir g
 
 __CRTP__, C++ dilinde sık kullanılan örüntülerden biri. Bu teknik 1980’li yıllarda  _"F-bounded quantification"_ olarak isimlendirilmiş. _1995_ yılında _Jim Coplien_ örüntüye bu ismi vermiş. O tarihten bugüne örüntü bu isimle biliniyor. Türkçeye kelime kelime çevirirsek _"meraklıca yinelenen şablon örüntüsü"_ diyebiliriz. _(demesek daha iyi olur gibi geliyor.)_ Şimdi örüntümüze bakalım. Taban sınıf olarak kullanılacak bir sınıf şablonumuz var ve türemiş sınıfların her biri bu şablon sınıfın türemiş sınıf açılımından türetiliyor:
 
+```
 #include <iostream>
 
 template <typename Derived>
@@ -33,7 +34,7 @@ int main()
 	myder.interface();  // "Der implementasyonu"
 
 }
-
+```
 İlginç bir yapı değil mi? _Der_ sınıfını bir sınıf şablonu olan _Base_'in, Base<Der> açılımından kalıtım yoluyla elde ediyoruz. Dilin kurallarını çiğneyen hiç bir durum yok. Yukarıdaki örnekte şu nokta özellikle dikkatimizi çekmeli:
 
 ```
