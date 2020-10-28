@@ -1,12 +1,11 @@
 Bildiğimiz gibi _C++_ dili sanal işlevler yoluyla çok biçimliliğe güçlü bir destek veriyor. Sanal işlevlerin kullanılması durumunda hangi işlevin çağrıldığı programın çalışma zamanında anlaşıldığından bu tür çok biçimliliğe “dinamik çok biçimlilik” ya da _“çalışma zamanı çok biçimliliği”_ deniyor. Dinamik çok biçimliliğin getirdiği ek maliyetler var. Sanal işlevlere yapılan çağrılarda derleyici tipik olarak şöyle bir kod üretiyor:
 
-* Sınıf nesnesinin içine bir gösterici veri öğesi gömülüyor. Sanal işleve bir çağrı yapıldığında bu göstericiden sanal işlev tablosu deneilen bir veri yapısının adresi elde ediliyor.
-* Bu veri yapısından bir indis kullanarak çağrılacak işlevin adresi elde ediliyor. Böyle bir kod da iki kez içerik alma (dereferencing) maliyeti içeriyor.
+* Sınıf nesnesinin içine bir gösterici veri elemanı gömülüyor. Sanal işleve bir çağrı yapıldığında bu göstericiden sanal işlev tablosu deneilen bir veri yapısının adresi elde ediliyor.
+* Bu veri yapısında derleme zamanında elde edilen bir indeks ile çağrılacak işlevin adresi elde ediliyor. Böyle bir kod da iki kez içerik alma _(dereferencing)_ maliyeti içeriyor.
 
-Bellek kullanımı açısından baktığımızda da her sınıf nesnesi için bir göstericilik bellek alanı kullanılıyor. Ayrıca türetme hiyerarşisi içindeki her sınıf için sanal işlev tablosu olarak kullanılan veri yapısının konumlandırılacağı bellek alanı gerekiyor. Özellikle küçük veriler taşıyan küçük sınıf nesneleri için bu bellek maliyeti bazen istenmiyor.  Performans kritik uygulamalarda sanal işlevlerin faydalarını bir ölçüde bize sağlayacak ancak maliyeti azaltacak bazı başka çözümler var. İşte CRTP bunuı sağlayan örüntülerden (pattern) biri.
+Bellek kullanımı açısından baktığımızda da her sınıf nesnesinde bir gösterici için ilave bir bellek alanı kullanılıyor. Ayrıca türetme hiyerarşisi içindeki her sınıf için sanal işlev tablosu olarak kullanılan veri yapısının konumlandırılacağı bellek alanı gerekiyor. Özellikle küçük veriler taşıyan küçük sınıf nesneleri için bu bellek maliyeti bazen istenmiyor. Performans kritik uygulamalarda sanal işlevlerin faydalarını bir ölçüde bize sağlayacak ancak maliyeti azaltacak bazı başka çözümler var. İşte __CRTP__ bunu sağlayan örüntülerden _(pattern)_ biri.
 
-CRTP, C++‘ta sık karşımıza çıkan örüntülerden biri. Bu teknik 1980’li yıllarda  “F-bounded quantification” olarak isimlendirilmiş.  1995 yılında Jim Coplien örüntüye bu ismi vermiş. O tarihten bugüne örüntü bu isimle biliniyor.   Türkçeye kelime kelime çevirirsek “meraklıca yinelenen şablon örüntüsü” diyebiliriz. (demesek daha iyi olur gibi geliyor.)
-Şimdi örüntümüze bakalım. Taban sınıf olarak kullanılacak bir sınıf şablonumuz var ve türemiş sınıfların her biri bu şablon sınıfın türemiş sınıf açılımından türetiliyor:
+__CRTP__, C++ dilinde sık kullanılan örüntülerden biri. Bu teknik 1980’li yıllarda  _"F-bounded quantification"_ olarak isimlendirilmiş. _1995_ yılında _Jim Coplien_ örüntüye bu ismi vermiş. O tarihten bugüne örüntü bu isimle biliniyor. Türkçeye kelime kelime çevirirsek _"meraklıca yinelenen şablon örüntüsü"_ diyebiliriz. _(demesek daha iyi olur gibi geliyor.)_ Şimdi örüntümüze bakalım. Taban sınıf olarak kullanılacak bir sınıf şablonumuz var ve türemiş sınıfların her biri bu şablon sınıfın türemiş sınıf açılımından türetiliyor:
 
 #include <iostream>
 
@@ -34,71 +33,22 @@ int main()
 	myder.interface();  // "Der implementasyonu"
 
 }
-1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-13
-14
-15
-16
-17
-18
-19
-20
-21
-22
-23
-24
-25
-26
-#include <iostream>
- 
-template <typename Derived>
-struct Base
-{
-	void interface()
-	{
-		static_cast<Derived *>(this)->implementation();
-	}
-	
-};
- 
-struct Der : Base<Der>
-{
-	void implementation()
-	{
-		std::cout << "Der implementasyonu\n";
-	}
-};
- 
-int main()
-{
-	Der myder;
-	myder.interface();  // "Der implementasyonu"
- 
-}
-İlginç bir yapı değil mi? A sınıfını bir sınıf şablonu olan B‘nin, B<A> açılımından türetiyoruz. Dilin kurallarını çiğneyen hiç bir durum yok. Yukarıdaki örnekte şu nokta özellikle dikkatimizi çekmeli:
 
+İlginç bir yapı değil mi? _Der_ sınıfını bir sınıf şablonu olan _Base_'in, Base<Der> açılımından kalıtım yoluyla elde ediyoruz. Dilin kurallarını çiğneyen hiç bir durum yok. Yukarıdaki örnekte şu nokta özellikle dikkatimizi çekmeli:
+
+```
 void Base<Der>::implementation()
-1
-void Base<Der>::implementation()
-işlevi  Base sınıfından türetilen Der sınıfının bildiriminden önce (yani derleyicinin bu sınıfı bilmesinden önce) bildirilmesine karşın işlevin kodu Der sınıfının bilinmesinden sonra yazılacak.
+```
 
-Dikkatimizi çekmesi gereken ikinci bir nokta da taban sınıfın interface üye işlevi içinde yapılan
+işlevi _Base_ sınıfından türetilen _Der_ sınıfının bildiriminden önce (yani derleyicinin bu sınıfı bilmesinden önce) bildirilmesine karşın işlevin kodu _Der_ sınıfının bilinmesinden sonra yazılacak.
 
+Dikkatimizi çekmesi gereken ikinci bir nokta da taban sınıfın _interface_ üye işlevi içinde yapılan aşağıdaki dönüşüm:
+
+```
 static_cast<Derived *>(this)
-1
-static_cast<Derived *>(this)
-dönüşümü. Dilin kurallarına göre bu dönüşümün geçerli  olabilmesi için Base ve Derived sınıflarının aynı hiyerarşi içinde bulunması gerekiyor. Bu dönüşümle Base sınıfı türünden nesnenin adresini (Derived *) türüne dönüştürüyor ve tür dönüştürme işlecinden elde edilen adresle türemiş sınıfının implementation isimli işlevi çağırıyoruz. Derleyici bu durumda implementation ismini türemiş sınıfın isim alanında arıyor.
+```
+
+Dilin kurallarına göre bu dönüşümün geçerli  olabilmesi için Base ve Derived sınıflarının aynı hiyerarşi içinde bulunması gerekiyor. Bu dönüşümle Base sınıfı türünden nesnenin adresini (Derived *) türüne dönüştürüyor ve tür dönüştürme işlecinden elde edilen adresle türemiş sınıfının implementation isimli işlevi çağırıyoruz. Derleyici bu durumda implementation ismini türemiş sınıfın isim alanında arıyor.
 
 Bu teknik dinamik çok biçimliliğin maliyetinden kaçınarak ve çoğu zaman ilave esneklik kazandırarak sanal işlevlerin etkilerine benzer bir yapı oluşturuyor. CRTP‘nin bu özel kullanımı bazı kişiler tarafından “statik çokbiçimlilik” ya da “simüle edilmiş dinamik bağlama” olarak isimlendiriliyor. Windows’un ATL ve WTL kütüphanelerinde bu teknik yoğun olarak kullanılıyor. Tekniği anlamak için, sanal işlevleri olmayan bir sınıfı kafanızda canlandırın. Taban sınıf başka işlevleri kendi öğe işlevleri yoluyla çağırıyor. Taban sınıftan bir türetme yaptığımızda taban sınıfın tüm veri öğelerini ve öğe işlevlerini kalıtım yoluyla almış oluyoruz.
 
