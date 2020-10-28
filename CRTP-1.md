@@ -5,7 +5,7 @@ Bildiğimiz gibi _C++_ dili sanal işlevler yoluyla çok biçimliliğe güçlü 
 
 Bellek kullanımı açısından baktığımızda da her sınıf nesnesinde bir gösterici için ilave bir bellek alanı kullanılıyor. Ayrıca türetme hiyerarşisi içindeki her sınıf için sanal işlev tablosu olarak kullanılan veri yapısının konumlandırılacağı bellek alanı gerekiyor. Özellikle küçük veriler taşıyan küçük sınıf nesneleri için bu bellek maliyeti bazen istenmiyor. Performans kritik uygulamalarda sanal işlevlerin faydalarını bir ölçüde bize sağlayacak ancak maliyeti azaltacak bazı başka çözümler var. İşte __CRTP__ bunu sağlayan örüntülerden _(pattern)_ biri.
 
-__CRTP__, C++ dilinde sık kullanılan örüntülerden biri. Bu teknik 1980’li yıllarda  _"F-bounded quantification"_ olarak isimlendirilmiş. _1995_ yılında _Jim Coplien_ örüntüye bu ismi vermiş. O tarihten bugüne örüntü bu isimle biliniyor. Türkçeye kelime kelime çevirirsek _"meraklıca yinelenen şablon örüntüsü"_ diyebiliriz. _(demesek daha iyi olur gibi geliyor.)_ Şimdi örüntümüze bakalım. Taban sınıf olarak kullanılacak bir sınıf şablonumuz var ve türemiş sınıfların her biri bu şablon sınıfın türemiş sınıf açılımından türetiliyor:
+__CRTP__, _C++_ dilinde sık kullanılan örüntülerden biri. Bu teknik 1980’li yıllarda  _"F-bounded quantification"_ olarak isimlendirilmiş. _1995_ yılında _Jim Coplien_ örüntüye bu ismi vermiş. O tarihten bugüne örüntü bu isimle biliniyor. Türkçeye kelime kelime çevirirsek _"meraklıca yinelenen şablon örüntüsü"_ diyebiliriz. _(demesek daha iyi olur gibi geliyor.)_ Şimdi örüntümüze bakalım. Taban sınıf olarak kullanılacak bir sınıf şablonumuz var ve türemiş sınıfların her biri bu şablon sınıfın türemiş sınıf açılımından türetiliyor:
 
 ```
 #include <iostream>
@@ -41,9 +41,9 @@ int main()
 void Base<Der>::implementation()
 ```
 
-işlevi _Base_ sınıfından türetilen _Der_ sınıfının bildiriminden önce (yani derleyicinin bu sınıfı bilmesinden önce) bildirilmesine karşın işlevin kodu _Der_ sınıfının bilinmesinden sonra yazılacak.
+fonksiyonu _Base_ sınıfından türetilen _Der_ sınıfının bildiriminden önce (yani derleyicinin bu sınıfı bilmesinden önce) bildirilmesine karşın işlevin kodu _Der_ sınıfının bilinmesinden sonra yazılacak.
 
-Dikkatimizi çekmesi gereken ikinci bir nokta da taban sınıfın _interface_ üye işlevi içinde yapılan aşağıdaki dönüşüm:
+Dikkatimizi çekmesi gereken ikinci bir nokta da taban sınıfın _interface_ üye fonksiyonu içinde yapılan aşağıdaki dönüşüm:
 
 ```
 static_cast<Derived *>(this)
@@ -53,20 +53,18 @@ Dilin kurallarına göre bu dönüşümün geçerli olabilmesi için _Base_ ve _
 
 Bu teknik dinamik çok biçimliliğin maliyetinden kaçınarak ve çoğu zaman ilave esneklik kazandırarak sanal işlevlerin etkilerine benzer bir yapı oluşturuyor. __CRTP__'nin bu özel kullanımı bazı kişiler tarafından _"statik çok biçimlilik"_ ya da _"simüle edilmiş dinamik bağlama"_ olarak isimlendiriliyor. _Windows_'un _ATL_ ve _WTL_ kütüphanelerinde bu teknik yoğun olarak kullanılıyor. Tekniği anlamak için, sanal fonksiyonları olmayan bir sınıfı kafanızda canlandırın. Taban sınıf başka fonksiyonları kendi üye fonksiyonları yoluyla çağırıyor. Taban sınıftan bir türetme yaptığımızda taban sınıfın tüm veri elemanlarını ve üye fonksiyonlarını kalıtım yoluyla almış oluyoruz.
 
-Şimdi bir örnek üzerinde dinamik çokbiçimliliği statik çok biçimliliğe dönüştürelim. Aşağıdaki gibi bir dinamik çokbiçimliliğe sahip sınıf hiyerarşimiz olsun:
+Şimdi bir örnek üzerinde dinamik çok biçimliliği statik çok biçimliliğe dönüştürelim. Aşağıdaki gibi bir dinamik çok biçimliliğe sahip sınıf hiyerarşimiz olsun:
 
 ```
 #include <iostream>
 #include <string>
-
-using namespace std;
 
 class Pet
 {
 public:
 	void makeSound()
 	{
-		std::cout << getSound() << endl;
+		std::cout << getSound() << "\n";
 	}
 
 	virtual std::string getSound() const = 0;
@@ -110,8 +108,6 @@ int main()
 ```
 #include <iostream>
 #include <string>
-
-using namespace std;
 
 template <typename T>
 class Pet
@@ -168,13 +164,14 @@ _Pet_ sınıfının _private_ bölümünde tanımlanan
 const T& thisObject() { return *static_cast<const T*>(this); }
 ```
 
-işlevi tür dönüştürme kodlarını daha kolay yazabilmemiz için oluşturduğumuz bir yardımcı yalnızca. _C++_'ın fonksiyon şablonlarına ilişkin önemli bir kuralını da hatırlamanın tam zamanı. Bir fonksiyon çağrısı yapılmadığı sürece derleyici bir fonksiyon şablonundan ya da sınıf şablonunun üye fonksiyonundan bir kod üretmeyecek. _getSound_ fonksiyonlarının kodunun üretilmesini tetikleyen _main_ fonksiyonu içinde yapılan çağrılar:
+fonksiyonu tür dönüştürme kodlarını daha kolay yazabilmemiz için oluşturduğumuz bir yardımcı yalnızca. _C++_'ın fonksiyon şablonlarına ilişkin önemli bir kuralını da hatırlamanın tam zamanı. Bir fonksiyon çağrısı yapılmadığı sürece derleyici bir fonksiyon şablonundan ya da sınıf şablonunun üye fonksiyonundan bir kod üretmeyecek. _getSound_ fonksiyonlarının kodunun üretilmesini tetikleyen _main_ fonksiyonu içinde yapılan çağrılar:
 
 ```
 mycat.makeSound();
 mydog.makeSound();
 ```
-Şüphesiz iki yapının ayrı ayrı avantajları ve dezavantajları var. CRTP kullandığımız yapıda ne taban sınıf nesneleri içinde gömülü bir gösterici ne de çalışma zamanında bellekte sınıflar için oluşturulmuş bir işlev tablosu tutuluyor. Fonksiyon çağrısı doğrudan yapılıyor. Yani iki ayrı içerik alma işlemi _(dereferencing)_ yok.
+
+Şüphesiz iki yapının ayrı ayrı avantajları ve dezavantajları var. __CRTP__ kullandığımız yapıda ne taban sınıf nesneleri içinde gömülü bir gösterici ne de çalışma zamanında bellekte sınıflar için oluşturulmuş bir işlev tablosu tutuluyor. Fonksiyon çağrısı doğrudan yapılıyor. Yani iki ayrı içerik alma işlemi _(dereferencing)_ yok.
 Ayrıca dinamik çok biçimlilikteki kurallardan farklı olarak taban sınıfın fonksiyonunun imzasıyla türemiş sınıfın fonksiyonunun imzasının aynı olması gerekmiyor.
 Diğer taraftan taban sınıftan yapılan her bir türetme için hem taban sınıf için hem de türemiş sınıflar için farklı kodlar oluşturulduğundan statik çok biçimlilik sağlayan bu yapıda oluşturulan kod miktarı daha fazla olma eğiliminde. Hangi işlevin çağrıldığı programın çalışma zamanında değil de derleme zamanında belli olduğu için bu yapının dinamik çok biçimliliğe göre daha kısıtlı bir kullanımı var. Dinamik çok biçimlilikteki gibi katı bir tür kontrolü yok.
 
