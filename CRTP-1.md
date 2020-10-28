@@ -170,18 +170,12 @@ const T& thisObject() { return *static_cast<const T*>(this); }
 
 işlevi tür dönüştürme kodlarını daha kolay yazabilmemiz için oluşturduğumuz bir yardımcı yalnızca. _C++_'ın fonksiyon şablonlarına ilişkin önemli bir kuralını da hatırlamanın tam zamanı. Bir fonksiyon çağrısı yapılmadığı sürece derleyici bir fonksiyon şablonundan ya da sınıf şablonunun üye fonksiyonundan bir kod üretmeyecek. _getSound_ fonksiyonlarının kodunun üretilmesini tetikleyen _main_ fonksiyonu içinde yapılan çağrılar:
 
+```
 mycat.makeSound();
 mydog.makeSound();
-1
-2
-mycat.makeSound();
-mydog.makeSound();
-Şüphesiz iki yapının ayrı ayrı avantajları ve dezavantajları var. CRTP kullandığımız yapıda:
-Ne taban sınıf nesneleri içine gömülü bir gösterici ne de çalışma zamanında bellekte sınıflar için oluşturulmuş bir işlev tablosu tutuluyor.
-İşlev çağrısı doğrudan yapılıyor. Yani iki ayrı içerik alma işlemi yok.
-Ayrıca dinamik çokbiçimlilikteki kurallardan farklı olarak taban sınıfın işlevinin imzasıyla türemiş sınıfın işlevinin imzasının aynı olması gerekmiyor.
-Diğer taraftan taban sınıftan yapılan her bir türetme için hem taban sınıf için hem de türemiş sınıflar için farklı kodlar oluşturulduğundan statik çok biçimlilik sağlayan bu yapıda oluşturulan kod miktarı daha fazla olma eğiliminde.
-Hangi işlevin çağrıldığı programın çalışma zamanında değil de derleme zamanında belli olduğu için bu yapının dinamik çok biçimliliğe göre daha kısıtlı bir kullanımı var.
-Dinamik çokbiçimlilikteki gibi katı bir tür kontrolü yok.
+```
+Şüphesiz iki yapının ayrı ayrı avantajları ve dezavantajları var. CRTP kullandığımız yapıda ne taban sınıf nesneleri içinde gömülü bir gösterici ne de çalışma zamanında bellekte sınıflar için oluşturulmuş bir işlev tablosu tutuluyor. Fonksiyon çağrısı doğrudan yapılıyor. Yani iki ayrı içerik alma işlemi _(dereferencing)_ yok.
+Ayrıca dinamik çok biçimlilikteki kurallardan farklı olarak taban sınıfın fonksiyonunun imzasıyla türemiş sınıfın fonksiyonunun imzasının aynı olması gerekmiyor.
+Diğer taraftan taban sınıftan yapılan her bir türetme için hem taban sınıf için hem de türemiş sınıflar için farklı kodlar oluşturulduğundan statik çok biçimlilik sağlayan bu yapıda oluşturulan kod miktarı daha fazla olma eğiliminde. Hangi işlevin çağrıldığı programın çalışma zamanında değil de derleme zamanında belli olduğu için bu yapının dinamik çok biçimliliğe göre daha kısıtlı bir kullanımı var. Dinamik çok biçimlilikteki gibi katı bir tür kontrolü yok.
 
-CRTP‘nin kullanımı bu örneklerle sınırlı değil. Bu serinin diğer yazılarında CRTP‘nin farklı amaçlarla kullanımını da inceleyeceğiz.
+__CRTP__'nin kullanımı bu örneklerle sınırlı değil. Bu serinin diğer yazılarında __CRTP__'nin farklı amaçlarla kullanımını da inceleyeceğiz.
