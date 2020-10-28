@@ -1,6 +1,7 @@
-Bildiğimiz gibi C++ dili sanal işlevler yoluyla çok biçimliliğe güçlü bir destek veriyor. Sanal işlevlerin kullanılması durumunda hangi işlevin çağrıldığı programın çalışma zamanında anlaşıldığından bu tür çokbiçimliliğe “dinamik çokbiçimlilik” ya da “çalışma zamanı çok biçimliliği” deniyor. Dinamik çokbiçimliliğin getirdiği ek maliyetler var. Sanal işlevlere yapılan çağrılarda derleyici tipik olarak şöyle bir kod üretiyor:
-i) Sınıf nesnesinin içine bir gösterici veri öğesi gömülüyor. Sanal işleve bir çağrı yapıldığında bu göstericiden sanal işlev tablosu deneilen bir veri yapısının adresi elde ediliyor.
-ii) Bu veri yapısından bir indis kullanarak çağrılacak işlevin adresi elde ediliyor. Böyle bir kod da iki kez içerik alma (dereferencing) maliyeti içeriyor.
+Bildiğimiz gibi _C++_ dili sanal işlevler yoluyla çok biçimliliğe güçlü bir destek veriyor. Sanal işlevlerin kullanılması durumunda hangi işlevin çağrıldığı programın çalışma zamanında anlaşıldığından bu tür çok biçimliliğe “dinamik çok biçimlilik” ya da _“çalışma zamanı çok biçimliliği”_ deniyor. Dinamik çok biçimliliğin getirdiği ek maliyetler var. Sanal işlevlere yapılan çağrılarda derleyici tipik olarak şöyle bir kod üretiyor:
+
+* Sınıf nesnesinin içine bir gösterici veri öğesi gömülüyor. Sanal işleve bir çağrı yapıldığında bu göstericiden sanal işlev tablosu deneilen bir veri yapısının adresi elde ediliyor.
+* Bu veri yapısından bir indis kullanarak çağrılacak işlevin adresi elde ediliyor. Böyle bir kod da iki kez içerik alma (dereferencing) maliyeti içeriyor.
 
 Bellek kullanımı açısından baktığımızda da her sınıf nesnesi için bir göstericilik bellek alanı kullanılıyor. Ayrıca türetme hiyerarşisi içindeki her sınıf için sanal işlev tablosu olarak kullanılan veri yapısının konumlandırılacağı bellek alanı gerekiyor. Özellikle küçük veriler taşıyan küçük sınıf nesneleri için bu bellek maliyeti bazen istenmiyor.  Performans kritik uygulamalarda sanal işlevlerin faydalarını bir ölçüde bize sağlayacak ancak maliyeti azaltacak bazı başka çözümler var. İşte CRTP bunuı sağlayan örüntülerden (pattern) biri.
 
