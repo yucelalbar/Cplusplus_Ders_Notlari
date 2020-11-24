@@ -22,9 +22,7 @@ public:
 };
 ```
 _Owner_ sınıfının _Member_ sınıfı türünden bir veri elemanı var ve _Owner_ sınıfının varsayılan kurucu işlevi bu elemanı, öğe ilk değer verme listesiyle hayata getiriyor. 
-_Owner_ sınıfının kurucu işlevi çağrıldığında _Member_ sınıfının _int_ parametreli kurucu işlevinden bir hata nesnesi gönderilirse ne olur? 
-Öncelikle _C++_ dilinin çok net bir kuralını bilmemiz gerekiyor. Eğer bir sınıf nesnesinin kurucu işlevinin kodu tamamen yürütülmez ise derleyici bu sınıf nesnesi için sonlandırıcı işlevi çağırmaz. Bu kuralın gerekliliği çok açık: 
-Sınıfın kurucu işlevi içinden, hata nesnesinin gönderildiği kaynak kod noktasından sonra birtakım kaynakların elde edildiğini düşünelim. 
+_Owner_ sınıfının kurucu işlevi çağrıldığında _Member_ sınıfının _int_ parametreli kurucu işlevinden bir hata nesnesi gönderilirse ne olur? Öncelikle _C++_ dilinin çok net bir kuralını bilmemiz gerekiyor. Eğer bir sınıf nesnesinin kurucu işlevinin kodu tamamen yürütülmez ise derleyici bu sınıf nesnesi için sonlandırıcı işlevi çağırmaz. Bu kuralın gerekliliği çok açık: Sınıfın kurucu işlevi içinden, hata nesnesinin gönderildiği kaynak kod noktasından sonra birtakım kaynakların elde edildiğini düşünelim. 
 Bu durumda sonlandırıcı işlev çağrılsaydı, hata nesnesinin gönderilmesi durumunda  sonlandırıcı işlev edinilmemiş kaynakları geri verme girişiminde bulunur bu da çalışma zamanı hatalarına neden olurdu. Yani en azından şöyle bir güvencemiz var: _Member_ sınıfının kurucu işlevinden bir hata nesnesinin gönderilmesi durumunda, ne _Member_ ne de _Owner_ sınıfının kurucu işlevinin kodu tamameen yürütülmüş olacak ve her iki sınıfın da sonlandırıcı işlevi çağrılmayacak.
 <br>
 
@@ -32,9 +30,7 @@ Sorumuza geri dönelim:
 Sınıfımızın ilk değer verme listesinin yürütülmesi sürecinde bir hata nesnesi gönderilirse ne yapmalıyız? Eğer yanıtınız hiç bir şey yapmamalıyız ise bu yanıt çoğunlukla yanlış. En azından yapmamız gereken gönderilen hata nesnesini yakalayarak kurucu işlevimizin hata durumunu loglamak ve yakalanan hata nesnesini yeniden göndermek _(rethrow)_. 
 Bazı durumlarda _rethrow_ işlemiyle yakalanan hata nesnesini yeniden göndermek yerine, yukarıdaki daha yüksek seviyeli kodlara durumu daha iyi anlatacak, kendi belirlediğimiz bir türden hata nesnesi göndermeyi de tercih edebiliriz.
 
-Peki hata nesnesini yakalamak için ne yapacağız? 
-Kurucu işlevimizin kodunun tamamını bir _try_ bloğu içine alsak bile öğe ilk değer verme listesinden gönderilecek hata nesnelerini yakalayamayız. 
-Çünkü öğe ilk değer verme listesi kodları _try_ bloğu içinde yer almıyor:
+Peki hata nesnesini yakalamak için ne yapacağız? Kurucu işlevimizin kodunun tamamını bir _try_ bloğu içine alsak bile öğe ilk değer verme listesinden gönderilecek hata nesnelerini yakalayamayız. Çünkü öğe ilk değer verme listesi kodları _try_ bloğu içinde yer almıyor:
 
 ```
 class Member {
@@ -60,10 +56,7 @@ public:
 };
 ```
 
-Yukarıdaki kodda _Owner_ sınıfının kurucu işlevinin tüm kodlarının _try_ bloğu içinde yer aldığını düşünelim. _Member_ sınıfının kurucu işlevinden bir hata nesnesi gönderilirse programın akışı _catch_ bloğuna girmeyecek.
-
-_C++_ dili öğe ilk değer verme listesinden gönderilebilecek hata nesnelerinin yakalanmasına olanak verecek özel bir _try_ bloğu oluşturmaya olanak sağlıyor.  
-Böyle _try_ bloklarına _"işlev try bloğu"_ deniyor. İşlev _try_ bloğu hem kurucu işlevin öğe ilk değer verme listesini hem de ana bloğunu kapsayan bir _try_ bloğu olarak düşünülebilir:
+Yukarıdaki kodda _Owner_ sınıfının kurucu işlevinin tüm kodlarının _try_ bloğu içinde yer aldığını düşünelim. _Member_ sınıfının kurucu işlevinden bir hata nesnesi gönderilirse programın akışı _catch_ bloğuna girmeyecek. _C++_ dili öğe ilk değer verme listesinden gönderilebilecek hata nesnelerinin yakalanmasına olanak verecek özel bir _try_ bloğu oluşturmaya olanak sağlıyor.  Böyle _try_ bloklarına _"işlev try bloğu"_ deniyor. İşlev _try_ bloğu hem kurucu işlevin öğe ilk değer verme listesini hem de ana bloğunu kapsayan bir _try_ bloğu olarak düşünülebilir:
 
 ```
 class Member {
