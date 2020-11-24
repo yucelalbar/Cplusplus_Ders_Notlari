@@ -100,8 +100,9 @@ Kurucu işlevin parametre değişkenleri sınıf türlerinden ise bu parametre d
 
 Programın akışı işlev try bloğunu izleyen bir catch bloğuna girdiğinde bu catch bloğu içinde program sonlandırılmaz ya da catch bloğundan bir hata nesnesi (yeniden) gönderilmez ise derleyicinin ürettiği kod ile otomatik olarak hata nesnesi yeniden gönderilir (rethrow).
 
-İşlev try bloklarının genel kullanım amacı kurucu işlevlere yönelik olsa da herhangi bir global işlev ya da bir sınıfın üye işlevi de işlev try bloğuna sahip olabilir. Örneğin dilersek main işlevi için bir işlev try bloğu oluşturabiliriz:
+İşlev _try_ bloklarının genel kullanım amacı kurucu işlevlere yönelik olsa da herhangi bir global işlev ya da bir sınıfın üye işlevi de işlev _try_ bloğuna sahip olabilir. Örneğin dilersek _main_ işlevi için bir işlev _try_ bloğu oluşturabiliriz:
 
+```
 int main() 
 try {
 	//
@@ -109,22 +110,12 @@ try {
 catch (...) {
 	///
 }
-1
-2
-3
-4
-5
-6
-7
-int main() 
-try {
-	//
-}
-catch (...) {
-	///
-}
-Normal try bloklarında olduğu gibi işlev try bloğu içinde tanıtılan isimler de try bloğunu izleyen catch blokları içinde bilinmezler. Ancak işlevin parametre değişkenleri catch bloklarında da bilinirler ve  programın  akışının bir catch bloğuna girmesi durumunda parametre değişkenleri catch bloğunun kodunun çalışması bitene kadar hayatta kalırlar:
+```
 
+Normal _try_ bloklarında olduğu gibi işlev _try_ bloğu içinde tanıtılan isimler de _try_ bloğunu izleyen catch blokları içinde bilinmezler. 
+Ancak işlevin parametre değişkenleri _catch_ bloklarında da bilinirler ve programın akışının bir _catch_ bloğuna girmesi durumunda parametre değişkenleri _catch_ bloğunun kodunun çalışması bitene kadar hayatta kalırlar:
+
+```
 #include <iostream>
 
 void func(int x)
@@ -143,42 +134,8 @@ int main()
 
 	return 0;
 }
-1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-13
-14
-15
-16
-17
-18
-#include <iostream>
- 
-void func(int x)
-try {
-	throw 1;
-}
-catch (...) {
-	std::cout << "x = " << x << "\n";
-	++x;
-	std::cout << "x = " << x << "\n";
-}
- 
-int main()
-{
-	func(10);
- 
-	return 0;
-}
+```
+
 Bir işlev try bloğunu izleyen catch bloğu içinde bir return deyimi yer alabilir. Böyle bir return deyimi try bloğuna konu işlevin return deyimidir. catch bloğu içinde bir return deyimi yok ise programın akışı catch bloğunun sonuna geldiğinde işlevin çalışan kodu sonlanmış olur. Eğer işlev void değilse yani işlevin bir geri dönüş değeri türü var ise programın akışının catch bloğunun sonuna kadar gelmesi tanımsız davranıştır.
 
-İsim alanı bilinirlik alanında (namespace scope) oluşturulmuş statik ömürlü bir nesnenin kurucu işlevinden gönderilecek bir hata nesnesi main işlevi için oluşturulacak olan bir işlev try bloğu içinde yakalanamaz. statik ömürlü global nesnelerin kurucu işlevleri main çağrılmadan önce çağrılmaktad
+İsim alanı kapsamında  _(namespace scope)_ oluşturulmuş statik ömürlü bir nesnenin kurucu işlevinden gönderilecek bir hata nesnesi _main_ işlevi için oluşturulacak olan bir işlev _try_ bloğu içinde yakalanamaz. statik ömürlü global nesnelerin kurucu işlevleri _main_ çağrılmadan önce çağrılmaktadır.
