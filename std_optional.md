@@ -69,7 +69,26 @@ int main()
 Yukarıdaki kodda _optional<int>_ türünden *op1, op2* ve _op3_ isimli nesneler hayata boş olarak getiriliyorlar. 
 _op3_ için çağrılan kurucu işleve argüman olarak *"std::nullopt"* ifadesinin gönderildiğini görüyorsunuz. 
 *<optional>* başlık dosyasında *nullopt_t* isimli bir boş sınıf _(empty class)_ tanımlanmış. 
-_nullopt_, bu boş sınıf türünden oluşturulan ve sabit ifadesi olarak kullanılabilen _constexpr_ bir sınıf nesnesi. `optional` sınıfının `nullopt_t` türünden kurucu işlevi, `nullopt` sabiti ile çağrıldığında bu kurucu işlev boş bir optional nesnesi hayata getiriyor. Yine bir `optional` değişkenine bu sabitin atanması `optional` nesnesinin sarmaladığı değişkenin hayatını sonlandırıyor, böylece` optional` nesnesi boşaltılmış oluyor:
+_nullopt_, bu boş sınıf türünden oluşturulan ve sabit ifadesi olarak kullanılabilen _constexpr_ bir sınıf nesnesi. 
+#define _CRT_SECURE_NO_WARNINGS
+
+#include <stdio.h>
+
+
+int main()
+{
+	int x;
+
+	printf("bir tamsayi girin: ");
+	int retval = scanf("%d", &x); //ctrl Z
+
+	printf("retval = %d\n", retval); 
+
+}
+//----------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------
+
+`optional` sınıfının `nullopt_t` türünden kurucu işlevi, `nullopt` sabiti ile çağrıldığında bu kurucu işlev boş bir optional nesnesi hayata getiriyor. Yine bir `optional` değişkenine bu sabitin atanması `optional` nesnesinin sarmaladığı değişkenin hayatını sonlandırıyor, böylece` optional` nesnesi boşaltılmış oluyor:
 
 ```
 #include <optional>
@@ -99,24 +118,27 @@ int main()
 	//...
 }
 ```
-`op1, op2`, ve `op3` nesnelerinin tanımında şablon tür argümanının kullanılmadığını görüyorsunuz.
-Burada `C++17` standartları ile dile eklenen ve popüler olarak `CTAD (constructor template argument deduction)` diye isimlendirilen özellik kullanılıyor. Bu mekanizma ile derleyici sınıfın kurucu işlevine gönderilen argümanın türünden hareketle şablon tür argümanının çıkarımını yapabiliyor. Yukarıdaki kodda derleyici `op1` nesnesine ilk değer veren ifadeden hareketle `op1` nesnesinin türünün çıkarımını
+
+_op1, op2_, ve _op3_ nesnelerinin tanımında şablon tür argümanının kullanılmadığını görüyorsunuz.
+Burada _C++17_ standartları ile dile eklenen ve popüler olarak _CTAD (constructor template argument deduction)_ diye isimlendirilen özellik kullanılıyor. 
+Bu mekanizma ile derleyici sınıfın kurucu işlevine gönderilen argümanın türünden hareketle şablon tür argümanının çıkarımını yapabiliyor. 
+Yukarıdaki kodda derleyici _op1_ nesnesine ilk değer veren ifadeden hareketle _op1_ nesnesinin türünün çıkarımını
 
 ```
 std::optional<int>
 ```
-olarak yapıyor. Benzer şekilde `op2` nesnesinin türü için
+olarak yapıyor. Benzer şekilde _op2_ nesnesinin türü için
 
 ```
 std::optional<const char *>
 ```
-`op3` nesnesinin türü için de
+_op3_ nesnesinin türü için de
 
 ```
 std::optional<std::string>>
 ```
 çıkarımları yapılıyor.
-Şüphesiz `optional` nesnesini oluştururken şablon tür argümanını istediğimiz gibi belirleyebiliriz:
+Şüphesiz _optional_ nesnesini oluştururken şablon tür argümanını istediğimiz gibi belirleyebiliriz:
 
 ```
 #include <optional>
@@ -152,8 +174,9 @@ int main()
                                                     {'c', 'T', 'a', 'B'}, f }; 
 }
 ```
-## `make_optional` işlevi
-`optional` nesnelerini oluşturmanın bir başka yolu da `make_optional` isimli global yardımcı işlevi çağırmak. Bu işleve birden fazla argüman geçsek de artık `in_place` nesnesini işleve göndermek zorunda değiliz:
+## *make_optional* işlevi
+_optional_ nesnelerini oluşturmanın bir başka yolu da _make_optional_ isimli global yardımcı işlevi çağırmak. 
+Bu işleve birden fazla argüman geçsek de artık _in_place_ nesnesini işleve göndermek zorunda değiliz:
 
 ```
 #include <optional>
@@ -167,14 +190,15 @@ int main()
         //op3 nesnesinin turu : optional<complex<double>>
 }
 ```
+
 ## optional nesnelerinin boş olup olmadığını sınamak
-Bir `optional` nesnesinin boş olup olmadığını yani bir değer tutup tutmadığını sınıfın `operator bool` ya da `has_value` isimli işlevleriyle sınayabiliriz:
+Bir _optional_ nesnesinin boş olup olmadığını yani bir değer tutup tutmadığını sınıfın _operator bool_ ya da _has_value_ isimli işlevleriyle sınayabiliriz:
 
 ```
 constexpr explicit operator bool() const noexcept;
 constexpr bool has_value()const noexcept;
 ```
-Bir `optional` nesnesini `nullopt` değeriyle eşitlik/eşitsizlik karşılaştırmasına da sokabiliriz:
+Bir _optional_ nesnesini _nullopt_ değeriyle eşitlik/eşitsizlik karşılaştırmasına da sokabiliriz:
 
 ```
 #include <optional>
@@ -196,7 +220,10 @@ int main()
 }
 ```
 ## optional nesnesinin tuttuğu değere erişmek
-`optional` nesnesinin tuttuğu değere erişmenin yine birden fazla yolu var. Sınıfın içerik operatör ve ok operatör fonksiyonları ile tutulan nesneye ya da o nesnenin öğelerine erişebiliriz. Ancak bu operatörlerin terimi olan optional nesnesinin boş olması durumunda tanımsız davranış `(undefined behavior)` oluşuyor. Böyle bir erişimde bir hata nesnesi gönderilmiyor `(exception throw edilmiyor)`. Aşağıdaki koda bakalım:
+`optional` nesnesinin tuttuğu değere erişmenin yine birden fazla yolu var. 
+Sınıfın içerik operatör ve ok operatör fonksiyonları ile tutulan nesneye ya da o nesnenin öğelerine erişebiliriz. 
+Ancak bu operatörlerin terimi olan optional nesnesinin boş olması durumunda tanımsız davranış `(undefined behavior)` oluşuyor. 
+Böyle bir erişimde bir hata nesnesi gönderilmiyor `(exception throw edilmiyor)`. Aşağıdaki koda bakalım:
 
 ```
 #include <optional>
@@ -217,7 +244,7 @@ int main()
 ```
 Yukarıdaki koddan da görüldüğü gibi operator `"*"` işlevi referans döndürüyor.
 
-Tutulan nesneye güvenli bir şekilde erişim gerçekleştirmek için öncelikle `optional` nesnesinin boş olmadığından emin olmalıyız:
+Tutulan nesneye güvenli bir şekilde erişim gerçekleştirmek için öncelikle _optional_ nesnesinin boş olmadığından emin olmalıyız:
 
 ```
 #include <optional>
@@ -244,8 +271,10 @@ int main()
 
 }
 ```
-## `value` işlevi
-Tutulan nesneye erişmenin bir başka yolu da sınıfın value isimli üye işlevini çağırmak. `operator *` işlevi gibi `value` işlevi de tutulan nesneye referans döndürüyor. Boş bir `optional` nesnesi için value işlevinin çağrılması durumunda, `std::exception` sınıfınından kalıtım yoluyla elde edilen `std::bad_optional_access` türünden bir hata nesnesi gönderiliyor:
+## _value_ işlevi
+Tutulan nesneye erişmenin bir başka yolu da sınıfın _value_ isimli üye işlevini çağırmak. 
+_operator *_ işlevi gibi _value_ işlevi de tutulan nesneye referans döndürüyor. 
+Boş bir _optional_ nesnesi için _value_ işlevinin çağrılması durumunda, _std::exception_ sınıfınından kalıtım yoluyla elde edilen _std::bad_optional_access_ türünden bir hata nesnesi gönderiliyor:
 
 ```
 #include <optional>
