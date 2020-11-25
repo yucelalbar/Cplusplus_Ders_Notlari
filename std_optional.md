@@ -86,7 +86,8 @@ int main()
 }
 ```
 
-`optional` sınıfının `nullopt_t` türünden kurucu işlevi, `nullopt` sabiti ile çağrıldığında bu kurucu işlev boş bir optional nesnesi hayata getiriyor. Yine bir `optional` değişkenine bu sabitin atanması `optional` nesnesinin sarmaladığı değişkenin hayatını sonlandırıyor, böylece` optional` nesnesi boşaltılmış oluyor:
+_optional_ sınıfının *nullopt_t* türünden kurucu işlevi, _nullopt_ sabiti ile çağrıldığında bu kurucu işlev boş bir _optional_ nesnesi hayata getiriyor. 
+Yine bir _optional_ değişkenine bu sabitin atanması _optional_ nesnesinin sarmaladığı değişkenin hayatını sonlandırıyor, böylece *optional* nesnesi boşaltılmış oluyor:
 
 ```
 #include <optional>
@@ -588,8 +589,8 @@ int main()
 			std::cout << ptr << " gecerli tamsayi icermiyor\n";
 }
 ```
-Yukarıdaki kodda tanımlanan *to_int* isimli işlev, bir *std::string* nesnesini bir tamsayıya dönüştürüyor.
-Ancak işleve gönderilen yazının geçerli bir tamsayı ifade etmemesi durumunda işlevimizin geri döndüreceği bir tamsayı olamayacak. 
+Yukarıdaki kodda tanımlanan *to_int* isimli işlev, bir *std::string* nesnesini bir tam sayıya dönüştürüyor.
+Ancak işleve gönderilen yazının geçerli bir tam sayı ifade etmemesi durumunda işlevimizin geri döndüreceği bir tam sayı olamayacak. 
 Bu yüzden işlevin geri dönüş değeri türünün
 
 ```
