@@ -20,7 +20,11 @@ Sarmalanmış yapı içindeki bayrak elemanı, kullanıcı kodlara bir değerin 
 _optional_ sınıfı _2003_ yılından bu yana _Boost_ kütüphanesinin kullanılan öğelerinden biri. 
 Standart kütüphanenin _optional_ sınıfının tasarımında da _Boost_ kütüphanesinin deneyiminden büyük ölçüde faydalanılmış.
 
-`std::optional` bir değer türü `(value type)` oluşturuyor. Yani kopyalama işlemleri ile aynı değere sahip farklı nesneler oluşturulabiliyor. Diğer taraftan bir `optional` nesnesi tutacağı değer için kendisi için ayrılmış bir bellek alanınını kullanıyor. Yani dinamik bir bellek alanı kullanmıyor. Aşağıdaki kodu derleyin ve ekran çıktısını yorumlamaya çalışın:
+_std::optional_ bir değer türü _(value type)_ oluşturuyor. 
+Yani kopyalama işlemleri ile aynı değere sahip farklı nesneler oluşturulabiliyor. 
+Diğer taraftan bir _optional_ nesnesi tutacağı değer için kendisi için ayrılmış bir bellek alanınını kullanıyor. 
+Yani dinamik bir bellek alanı kullanmıyor. 
+Aşağıdaki kodu derleyin ve ekran çıktısını yorumlamaya çalışın:
 
 ```
 #include <optional>
@@ -45,9 +49,10 @@ int main()
 }
 ```
 
-## `optional` nesnelerinin oluşturulması
+## _optional_ nesnelerinin oluşturulması
 
-`optional` nesnelerinin oluşturulması için birden fazla yol var. Bunlardan biri, bir nesne hayata getirmeyen yani değer tutmayan (boş) bir `optional` nesnesi oluşturmak:
+_optional_ nesnelerinin oluşturulması için birden fazla yol var. 
+Bunlardan biri, bir nesne hayata getirmeyen yani değer tutmayan (boş) bir _optional_ nesnesi oluşturmak:
 
 ```
 #include <optional>
@@ -60,7 +65,11 @@ int main()
 	//...
 }
 ```
-Yukarıdaki kodda `optional<int>` türünden `op1, op2` ve `op3` isimli nesneler hayata boş olarak getiriliyorlar. `op3` için çağrılan kurucu işleve argüman olarak `"std::nullopt"` ifadesinin gönderildiğini görüyorsunuz. `<optional>` başlık dosyasında `nullopt_t` isimli bir boş sınıf `(empty class)` tanımlanmış. `nullopt`, bu boş sınıf türünden oluşturulan ve sabit ifadesi olarak kullanılabilen `constexpr` bir sınıf nesnesi. `optional` sınıfının `nullopt_t` türünden kurucu işlevi, `nullopt` sabiti ile çağrıldığında bu kurucu işlev boş bir optional nesnesi hayata getiriyor. Yine bir `optional` değişkenine bu sabitin atanması `optional` nesnesinin sarmaladığı değişkenin hayatını sonlandırıyor, böylece` optional` nesnesi boşaltılmış oluyor:
+
+Yukarıdaki kodda _optional<int>_ türünden *op1, op2* ve _op3_ isimli nesneler hayata boş olarak getiriliyorlar. 
+_op3_ için çağrılan kurucu işleve argüman olarak *"std::nullopt"* ifadesinin gönderildiğini görüyorsunuz. 
+*<optional>* başlık dosyasında *nullopt_t* isimli bir boş sınıf _(empty class)_ tanımlanmış. 
+_nullopt_, bu boş sınıf türünden oluşturulan ve sabit ifadesi olarak kullanılabilen _constexpr_ bir sınıf nesnesi. `optional` sınıfının `nullopt_t` türünden kurucu işlevi, `nullopt` sabiti ile çağrıldığında bu kurucu işlev boş bir optional nesnesi hayata getiriyor. Yine bir `optional` değişkenine bu sabitin atanması `optional` nesnesinin sarmaladığı değişkenin hayatını sonlandırıyor, böylece` optional` nesnesi boşaltılmış oluyor:
 
 ```
 #include <optional>
