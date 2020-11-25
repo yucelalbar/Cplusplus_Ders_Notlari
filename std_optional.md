@@ -70,10 +70,9 @@ Yukarıdaki kodda _optional<int>_ türünden *op1, op2* ve _op3_ isimli nesnele
 _op3_ için çağrılan kurucu işleve argüman olarak *"std::nullopt"* ifadesinin gönderildiğini görüyorsunuz. 
 *<optional>* başlık dosyasında *nullopt_t* isimli bir boş sınıf _(empty class)_ tanımlanmış. 
 _nullopt_, bu boş sınıf türünden oluşturulan ve sabit ifadesi olarak kullanılabilen _constexpr_ bir sınıf nesnesi. 
-#define _CRT_SECURE_NO_WARNINGS
 
+```
 #include <stdio.h>
-
 
 int main()
 {
@@ -85,8 +84,7 @@ int main()
 	printf("retval = %d\n", retval); 
 
 }
-//----------------------------------------------------------------------------------------------------
-//----------------------------------------------------------------------------------------------------
+```
 
 `optional` sınıfının `nullopt_t` türünden kurucu işlevi, `nullopt` sabiti ile çağrıldığında bu kurucu işlev boş bir optional nesnesi hayata getiriyor. Yine bir `optional` değişkenine bu sabitin atanması `optional` nesnesinin sarmaladığı değişkenin hayatını sonlandırıyor, böylece` optional` nesnesi boşaltılmış oluyor:
 
