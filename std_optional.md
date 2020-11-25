@@ -153,7 +153,11 @@ int main()
 	//...
 }
 ```
-Ancak `optional` nesnesinin kurucu işlevine birden fazla değer gönderilecek ise bu durumda şablon tür argümanı belirtilse dahi çıkarım yapılamıyor. Bu yüzden optional sınıfının kurucu işlevine birden fazla argümanın gönderilmesi durumunda, tür çıkarımın yapılabilmesi için ilk argüman olarak `in_place` ifadesinin gönderilmesi gerekiyor. `std::in_place` standart `<utility>` başlık dosyasında tanımlanmış olan `in_place_t` isimli bir boş sınıf türünden `constexpr` bir nesnenin ismi. Bu tür boş sınıfların ve boş sınıf nesnelerinin varlık nedeni derleyicinin çıkarım yapmasına olanak sağlamak. Aşağıdaki koda bakalım:
+
+Ancak _optional_ nesnesinin kurucu işlevine birden fazla değer gönderilecek ise bu durumda şablon tür argümanı belirtilse dahi çıkarım yapılamıyor. 
+Bu yüzden _optional_ sınıfının kurucu işlevine birden fazla argümanın gönderilmesi durumunda, tür çıkarımın yapılabilmesi için ilk argüman olarak *in_place* ifadesinin gönderilmesi gerekiyor. 
+*std::in_place* standart *<utility>* başlık dosyasında tanımlanmış olan *in_place_t* isimli bir boş sınıf türünden _constexpr_ bir nesnenin ismi. 
+Bu tür boş sınıfların ve boş sınıf nesnelerinin varlık nedeni derleyicinin çıkarım yapmasına olanak sağlamak. Aşağıdaki koda bakalım:
 
 ```
 #include <optional>
@@ -218,10 +222,10 @@ int main()
 }
 ```
 ## optional nesnesinin tuttuğu değere erişmek
-`optional` nesnesinin tuttuğu değere erişmenin yine birden fazla yolu var. 
+_optional_ nesnesinin tuttuğu değere erişmenin yine birden fazla yolu var. 
 Sınıfın içerik operatör ve ok operatör fonksiyonları ile tutulan nesneye ya da o nesnenin öğelerine erişebiliriz. 
-Ancak bu operatörlerin terimi olan optional nesnesinin boş olması durumunda tanımsız davranış `(undefined behavior)` oluşuyor. 
-Böyle bir erişimde bir hata nesnesi gönderilmiyor `(exception throw edilmiyor)`. Aşağıdaki koda bakalım:
+Ancak bu operatörlerin operandı olan _optional_ nesnesinin boş olması durumunda tanımsız davranış _(undefined behavior)_ oluşuyor. 
+Böyle bir erişimde bir hata nesnesi gönderilmiyor _(exception throw edilmiyor)_. Aşağıdaki koda bakalım:
 
 ```
 #include <optional>
@@ -296,8 +300,10 @@ int main()
 	}
 }
 ```
-## `value_or` işlevi
-Tutulan değere erişmenin bir başka yolu da sınıfın `value_or` isimli işlevini çağırmak. Bu işlev `value` işlevinden farklı olarak bir argüman alıyor ve `optional` nesnesinin boş olması durumunda kendisine gelen bu değeri döndürüyor:
+
+## *value_or* işlevi
+Tutulan değere erişmenin bir başka yolu da sınıfın *value_or* isimli işlevini çağırmak. 
+Bu işlev _value_ işlevinden farklı olarak bir argüman alıyor ve _optional_ nesnesinin boş olması durumunda kendisine gelen bu değeri döndürüyor:
 
 ```
 #include <optional>
@@ -318,7 +324,7 @@ int main()
 	//...	
 }
 ```
-`value` işlevinden farklı olarak `value_or` işlevi referans döndürmüyor:
+_value_ işlevinden farklı olarak *value_or* işlevi referans döndürmüyor:
 
 ```
 #include <optional>
@@ -333,15 +339,16 @@ int main()
 }
 ```
 
-## `optional` nesnelerinin değerlerini değiştirmek
-`std::optional<T>` sınıfı türünden bir nesnenin değerini değiştirmek için sınıfın atama operatörlerini kullanabiliriz. Atama operatörünün sağ terimi olan ifade
+## _optional_ nesnelerinin değerlerini değiştirmek
+*std::optional<T>* sınıfı türünden bir nesnenin değerini değiştirmek için sınıfın atama operatörlerini kullanabiliriz. 
+Atama operatörünün sağ terimi olan ifade
 
-+ `optional<T>` türünden olabilir.
-+ `optional<U>` türünden olabilir. (`U` türünden `T` türüne dönüşüm var ise)
-+ `T` türünden olabilir.
-+ `U` türünden olabilir. (`U` türünden `T` türüne dönüşüm var ise)
-+ `std::nullopt` değeri olabilir.
-+ `{}` ifadesi olabilir.
++ *optional<T>* türünden olabilir.
++ *optional<U>* türünden olabilir. (_U_ türünden _T_ türüne dönüşüm var ise)
++ _T_ türünden olabilir.
++ _U_ türünden olabilir. (_U_ türünden _T_ türüne dönüşüm var ise)
++ _std::nullopt_ değeri olabilir.
++ _{}_ ifadesi olabilir.
 
 Aşağıdaki kodu inceleyelim:
 
@@ -373,8 +380,11 @@ int main()
 }
 ```
 
-## `emplace` işlevi
-`optional` sınıfının en önemli işlevlerinden biri `emplace`. Bu işlev ile bir nesneyi kopyalama olmadan doğrudan `optional` nesnesi içinde yer alan bellek alanında hayata başlatabiliyoruz. `emplace` işlevi standart kütüphanedeki kap sınıflarının `emplace` işlevlerinde olduğu gibi mükemmel gönderim `(perfect forwarding)` mekanizmasından faydalanıyor. Dolu bir `optional` nesnesi için emplace işlevi çağrıldığında `optional` nesnesi tutmakta olduğu nesnesin sonlandırıcı işlevini `(destructor)` çağırıyor:
+## _emplace_ işlevi
+_optional_ sınıfının en önemli işlevlerinden biri _emplace_. 
+Bu işlev ile bir nesneyi kopyalama olmadan doğrudan _optional_ nesnesi içinde yer alan bellek alanında hayata başlatabiliyoruz. 
+_emplace_ işlevi standart kütüphanedeki kap sınıflarının _emplace_ işlevlerinde olduğu gibi mükemmel gönderim _(perfect forwarding)_ mekanizmasından faydalanıyor. 
+Dolu bir _optional_ nesnesi için _emplace_ işlevi çağrıldığında _optional_ nesnesi tutmakta olduğu nesnesin sonlandırıcı işlevini _(destructor)_ çağırıyor:
 
 ```
 #include <iostream>
@@ -401,15 +411,17 @@ int main()
 	os.emplace("necati");
 }
 ```
-Yukarıdaki kodu derleyip çalıştırın. `optional` nesnesi dolu iken `emplace` işlevi her çağrıldığında önce `A` sınıfının sonlandırıcı işlevinin çağrıldığını daha sonra ise `A` sınıfının uygun kurucu işlevinin çağrıldığını göreceksiniz.
+Yukarıdaki kodu derleyip çalıştırın. 
+_optional_ nesnesi dolu iken _emplace_ işlevi her çağrıldığında önce _A_ sınıfının sonlandırıcı işlevinin çağrıldığını daha sonra ise _A_ sınıfının uygun kurucu işlevinin çağrıldığını göreceksiniz.
 
-## `optional` nesneleri tarafından kontrol edilen nesnelerin ömürleri
-Bir `optional` nesnesinin hayatı bittiğinde `optional` nesnesi dolu ise hayata getirilmiş nesnenin sonlandırıcı işlevi çağrılır. Ancak aşağıdaki durumlarda da `optional` nesnesinin kontrol ettiği nesnenin sonlandırıcı işlevi çağrılır:
+## _optional_ nesneleri tarafından kontrol edilen nesnelerin ömürleri
+Bir _optional_ nesnesinin hayatı bittiğinde _optional_ nesnesi dolu ise hayata getirilmiş nesnenin sonlandırıcı işlevi çağrılır. 
+Ancak aşağıdaki durumlarda da _optional_ nesnesinin kontrol ettiği nesnenin sonlandırıcı işlevi çağrılır:
 
-+ `optional` nesnesinin `emplace` isimli işlevinin çağrılması
-+ `optional` nesnesine `nullopt` değerinin atanması
-+ `optional` nesnesine `{}` ifadesinin atanması
-+ `optional` nesnesinin reset işlevinin çağrılması (sınıfın `reset` isimli işlevinin çağrılmasıyla eğer `optional` nesnesi boş değil ise kontrol edilen nesnenin ömrü sonlandırılır.)
++ _optional_ nesnesinin _emplace_ isimli işlevinin çağrılması
++ _optional_ nesnesine _nullopt_ değerinin atanması
++ _optional_ nesnesine _{}_ ifadesinin atanması
++ _optional_ nesnesinin reset işlevinin çağrılması (sınıfın _reset_ isimli işlevinin çağrılmasıyla eğer _optional_ nesnesi boş değil ise kontrol edilen nesnenin ömrü sonlandırılır.)
 
 ```
 #include <iostream>
@@ -435,8 +447,11 @@ int main()
 	os.emplace(60);
 }
 ```
-## optional sınıfı ve taşıma semantiği
-`optional` sınıfı taşıma semantiğini de destekliyor. Bir `optional` nesnesini başka bir `optional` nesnesine taşıyabiliyoruz. Bu durumda içerilen bir nesne var ise o da taşınıyor. Aşağıdaki kodu derleyip çalıştırın:
+## _optional_ sınıfı ve taşıma semantiği
+_optional_ sınıfı taşıma semantiğini de destekliyor. 
+Bir _optional_ nesnesini başka bir _optional_ nesnesine taşıyabiliyoruz. 
+Bu durumda içerilen bir nesne var ise o da taşınıyor. 
+Aşağıdaki kodu derleyip çalıştırın:
 
 ```
 #include <optional>
@@ -460,8 +475,11 @@ int main()
 	std::cout << op2.has_value() << "\n";
 }
 ```
-Yukarıdaki kodda, `op1` nesnesinin taşınması ile `op1`'in içerdiği `A` nesnesi taşınmış oluyor. Taşıma işleminden sonra `op1` nesnesi dolu olsa da içerdiği nesne taşınmış durumda `(moved-from state)`. İçerilen nesneye yeniden bir değer atamadan bu nesne yeniden kullanılmamalı.
-İçerilecek nesneyi dışarıdan içeriye ya da içerilen nesneyi içeriden dışarıya taşımak da mümkün. Aşağıdaki koda bakalım:
+Yukarıdaki kodda, *op1* nesnesinin taşınması ile *op1*'in içerdiği *A* nesnesi taşınmış oluyor. 
+Taşıma işleminden sonra *op1* nesnesi dolu olsa da içerdiği nesne taşınmış durumda *(moved-from state)*. 
+İçerilen nesneye yeniden bir değer atamadan bu nesne yeniden kullanılmamalı.
+İçerilecek nesneyi dışarıdan içeriye ya da içerilen nesneyi içeriden dışarıya taşımak da mümkün. 
+Aşağıdaki koda bakalım:
 
 ```
 int main()
@@ -474,17 +492,17 @@ int main()
 ```
 Yukarıdaki kodu derleyip çalıştırdığınızda `A` sınıfının taşıyan kurucu işlevinin `(move constructor)` iki kez çağrıldığını göreceksiniz.
 
-## optional nesneleri ve karşılaştırma işlemleri
-optional<T> türünden bir nesne
-a) optional<T> türünden bir nesne ile
-b) optional<U> türünden bir nesne ile (eğer T ve U karşılaştırılabilir türler ise)
-b) T türünden bir ifade ile
-d) U türünden bir ifade ile (eğer T ve U karşılaştırılabilir türler ise)
-c) std::nullopt değeri ile
+## _optional_ nesneleri ve karşılaştırma işlemleri
+*optional<T>* türünden bir nesne
+a) *optional<T>* türünden bir nesne ile
+b) *optional<U>* türünden bir nesne ile (eğer *T* ve *U* karşılaştırılabilir türler ise)
+b) *T* türünden bir ifade ile
+d) *U* türünden bir ifade ile (eğer *T* ve *U* karşılaştırılabilir türler ise)
+c) *std::nullopt* değeri ile
 
 karşılaştırılabilir. Karşılaştırılan değerler optional nesnelerinin tuttuğu değerlerdir.
 Boş bir optional nesnesi değeri ne olursa olsun dolu bir optional nesnesinden daha küçük kabul edilir.
-İki boş optional nesnesinin karşılaştırılmasından true değeri elde edilir.
+İki boş optional nesnesinin karşılaştırılmasından _true_ değeri elde edilir.
 Aşağıdaki kodda yapılan karşılaştırma işlemlerini inceleyiniz:
 
 ```
@@ -512,7 +530,7 @@ int main()
 	cout << (oz < omin) << '\n'; //true
 }
 ```
-`optional<bool>` nesneleri ile yapılan karşılaştırmalara özellikle dikkat edilmeli. Aşağıdaki koda da bakalım:
+*optional<bool>* nesneleri ile yapılan karşılaştırmalara özellikle dikkat edilmeli. Aşağıdaki koda da bakalım:
 
 ```
 #include <optional>
@@ -539,7 +557,12 @@ int main()
 }
 ```
 ## optional sınıfının kullanıldığı tipik durumlar
-+ Bir işlevin `optional` sınıfı türünden bir değer döndürmesi. Bazı işlevler bir koşula bağlı olarak bir değer döndürebilirler. Ancak koşul sağlanmadığında döndürecek değerleri olmayabilir. Yani işlevin bir değer döndürmesi kadar döndürmemesi de doğaldır. Bu tür durumlarda işlevin geri dönüş değeri optional sınıfı türünden olabilir. Aşağıdaki kodu inceleyelim:
++ Bir işlevin *optional* sınıfı türünden bir değer döndürmesi. 
+Bazı işlevler bir koşula bağlı olarak bir değer döndürebilirler. 
+Ancak koşul sağlanmadığında döndürecek değerleri olmayabilir. 
+Yani işlevin bir değer döndürmesi kadar döndürmemesi de doğaldır. 
+Bu tür durumlarda işlevin geri dönüş değeri _optional_ sınıfı türünden olabilir. 
+Aşağıdaki kodu inceleyelim:
 
 ```
 #include <optional>
@@ -565,14 +588,16 @@ int main()
 			std::cout << ptr << " gecerli tamsayi icermiyor\n";
 }
 ```
-Yukarıdaki kodda tanımlanan `to_int` isimli işlev, bir `std::string` nesnesini bir tamsayıya dönüştürüyor.
-Ancak işleve gönderilen yazının geçerli bir tamsayı ifade etmemesi durumunda işlevimizin geri döndüreceği bir tamsayı olamayacak. Bu yüzden işlevin geri dönüş değeri türünün
+Yukarıdaki kodda tanımlanan *to_int* isimli işlev, bir *std::string* nesnesini bir tamsayıya dönüştürüyor.
+Ancak işleve gönderilen yazının geçerli bir tamsayı ifade etmemesi durumunda işlevimizin geri döndüreceği bir tamsayı olamayacak. 
+Bu yüzden işlevin geri dönüş değeri türünün
 
 ```
 std::optional<int>
 ```
-olarak seçildiğini görüyorsunuz. İşlev gelen yazıdan bir tamsayı elde edilemesi durumunda boş bir `optional<int>` nesnesi döndürüyor.
-`to_int` isimli işlevi aşağıdaki gibi de tanımlayabilirdik:
+olarak seçildiğini görüyorsunuz. 
+İşlev gelen yazıdan bir tamsayı elde edilemesi durumunda boş bir *optional<int>* nesnesi döndürüyor.
+*to_int* isimli işlevi aşağıdaki gibi de tanımlayabilirdik:
 
 ```
 std::optional<int> to_int(const std::string& s)
@@ -587,11 +612,14 @@ std::optional<int> to_int(const std::string& s)
 	return retval;
 }
 ```
-+ Bir işlevin parametre değişkeninin `optional` sınıfı türünden olması. Bir işlevin bir parametresine, müşteri kodun bir değer göndermesi kadar değer göndermemesi de doğal bir durum ise işlevin parametre değişkeni `optional` sınıfı türünden yapılabilir. Bu durumda işlevi çağıracak kod bu parametreye ya bir değer ya da `std::nullopt` sabitini gönderebilir.
 
-+ Bir sınıfın bir veri öğesinin optional sınıfı türünden olması.
++ Bir işlevin parametre değişkeninin _optional_ sınıfı türünden olması. 
+Bir işlevin bir parametresine, müşteri kodun bir değer göndermesi kadar değer göndermemesi de doğal bir durum ise işlevin parametre değişkeni _optional_ sınıfı türünden yapılabilir. 
+Bu durumda işlevi çağıracak kod bu parametreye ya bir değer ya da _std::nullopt_ sabitini gönderebilir.
 
-Aşağıdaki kodda hem bir işlevin parametresinin hem de bir sınıfın bir veri öğesinin `std::optional` türünden olduğunu göreceksiniz:
++ Bir sınıfın bir veri elemanının _optional_ sınıfı türünden olması.
+
+Aşağıdaki kodda hem bir işlevin parametresinin hem de bir sınıfın bir veri öğesinin *std::optional* türünden olduğunu göreceksiniz:
 
 ```
 #include <optional>
@@ -622,4 +650,5 @@ public:
 };
 ```
 
-Yukarıdaki kodda kişilerin isimlerini, temsil etmek amacıyla `Name` isimli bir sınıfın tanımlandığını görüyorsunuz. Sınıfın `std::optional<std::string` türünden `m_middle` isimli veri öğesi kişilerin sahip olabileceği ya da sahip olmayacağı ikinci isimlerini tutması için tanımlanmış.
+Yukarıdaki kodda kişilerin isimlerini, temsil etmek amacıyla _Name_ isimli bir sınıfın tanımlandığını görüyorsunuz. 
+Sınıfın *std::optional<std::string>* türünden *m_middle* isimli veri öğesi kişilerin sahip olabileceği ya da sahip olmayacağı ikinci isimlerini tutması için tanımlanmış.
