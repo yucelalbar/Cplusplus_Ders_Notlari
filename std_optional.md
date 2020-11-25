@@ -1,20 +1,24 @@
 # std::optional Sınıfı 
 
-`C++17` standartları ile standart kütüphanemizin bir eksiği daha tamamlandı. Artık bizim de bir `optional` sınıfımız var. Bu yazımızda std::optional sınıfını ayrıntılı olarak ele alacağız.
+_C++17_ standartları ile standart kütüphanemizin bir eksiği daha tamamlandı. Artık bizim de bir _optional_ sınıfımız var. Bu yazımızda _std::optional_ sınıfını ayrıntılı olarak ele alacağız.
 
-Programlamada sıklıkla karşımıza çıkan bir durum var: Bir koşul sağlandığında bir nesne oluşturup o nesneyi kullanmamız gerekiyor. Ama bu koşul sağlanmadığında ise bir nesneye ihtiyacımız kalmıyor dolayısıyla bir nesne oluşturmamız gerekmiyor. İşte `std::optional` sınıfı böyle durumlarda kullanılıyor.
+Programlamada sıklıkla karşımıza çıkan bir durum var: Bir koşul sağlandığında bir nesne oluşturup o nesneyi kullanmamız gerekiyor. Ama bu koşul sağlanmadığında ise bir nesneye ihtiyacımız kalmıyor dolayısıyla bir nesne oluşturmamız gerekmiyor. İşte _std::optional_ sınıfı böyle durumlarda kullanılıyor.
 
-`std::optional<T>` türünden bir nesne, programın çalışma zamanının belirli bir noktasında `T` türünden bir değer tutuyor ya da tutmuyor durumda olabilir. optional nesnesinin bir değere sahip olması kadar bir değere sahip olmaması da son derece doğal bir durum. `std` isim alanı içinde tanımlanan `optional` sınıf şablonunun bildirimi şöyle:
+*std::optional<T>* türünden bir nesne, programın çalışma zamanının belirli bir noktasında *T* türünden bir değer tutuyor ya da tutmuyor durumda olabilir. _optional_ nesnesinin bir değere sahip olması kadar bir değere sahip olmaması da son derece doğal bir durum. _std_ isim alanı içinde tanımlanan _optional_ sınıf şablonunun bildirimi şöyle:
 
 ```
 template<typename T>
 class optional;
 ```
-Burada T, `optional` nesnesinin tutabileceği nesnenin türü.
 
-Peki böyle bir sınıfın gerçekleştirimi nasıl yapılabilir dersiniz? `std::optional` sınıfı türünden bir nesne aslında `T` türünden bir nesne için kullanılacak bir bellek alanına ve bir de `bool` değişkeni tutacak bellek alanına sahip. `bool` türden değişken `std::optional` nesnesinin `T` türünden bir nesneye sahip olup olmadığını gösterecek bir bayrak olarak kullanılıyor.
+Burada T, _optional_ nesnesinin tutabileceği nesnenin türü.
 
-Herhangi türden bir nesneyi `bool` türden bir bayrak değişken ile birlikte bir sınıf oluşturacak şekilde sarmalayabiliriz. Sarmalanmış yapı içindeki bayrak öğesi, kullanıcı kodlara bir değerin tutulduğu ya da tutulmadığı konusunda bilgi verebilir. İngilizcede bu şekilde oluşturulmuş türlere `"nullable types"` deniyor. Böyle bir türden bir nesnenin kullanıcıları, bir yorum satırına gerek kalmaksızın, nesnenin bir değer tutup tutmadığını sorgulayabilirler. Programlama dünyasında opsiyonel türler yeni değil. Örneğin `Haskel` dilinde yer alan `Data.maybe` opsiyonel türlerin en eskilerinden biri. `optional` sınıfı `2003` yılından bu yana `Boost` kütüphanesinin kullanılan öğelerinden biri. Standart kütüphanenin `optional` sınıfının tasarımında da `Boost` kütüphanesinin deneyiminden büyük ölçüde faydalanılmış.
+Peki böyle bir sınıfın gerçekleştirimi nasıl yapılabilir dersiniz? _std::optional_ sınıfı türünden bir nesne aslında _T_ türünden bir nesne için kullanılacak bir bellek alanına ve bir de _bool_ değişkeni tutacak bellek alanına sahip. _bool_ türden değişken _std::optional_ nesnesinin _T_ türünden bir nesneye sahip olup olmadığını gösterecek bir bayrak olarak kullanılıyor.
+
+Herhangi türden bir nesneyi _bool_ türden bir bayrak değişken ile birlikte bir sınıf oluşturacak şekilde sarmalayabiliriz. 
+Sarmalanmış yapı içindeki bayrak elemanı, kullanıcı kodlara bir değerin tutulduğu ya da tutulmadığı konusunda bilgi verebilir. İngilizcede bu şekilde oluşturulmuş türlere _"nullable types"_ deniyor. Böyle bir türden bir nesnenin kullanıcıları, bir yorum satırına gerek kalmaksızın, nesnenin bir değer tutup tutmadığını sorgulayabilirler. Programlama dünyasında opsiyonel türler yeni değil. Örneğin _Haskel_ dilinde yer alan _Data.maybe_ opsiyonel türlerin en eskilerinden biri. 
+_optional_ sınıfı _2003_ yılından bu yana _Boost_ kütüphanesinin kullanılan öğelerinden biri. 
+Standart kütüphanenin _optional_ sınıfının tasarımında da _Boost_ kütüphanesinin deneyiminden büyük ölçüde faydalanılmış.
 
 `std::optional` bir değer türü `(value type)` oluşturuyor. Yani kopyalama işlemleri ile aynı değere sahip farklı nesneler oluşturulabiliyor. Diğer taraftan bir `optional` nesnesi tutacağı değer için kendisi için ayrılmış bir bellek alanınını kullanıyor. Yani dinamik bir bellek alanı kullanmıyor. Aşağıdaki kodu derleyin ve ekran çıktısını yorumlamaya çalışın:
 
