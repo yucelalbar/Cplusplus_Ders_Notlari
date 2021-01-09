@@ -47,9 +47,9 @@ func()  //C++'da geçersiz
 ```
 
 C89 standartlarına göre yukarıdaki kodda 
-	+bildirilen *foo* işlevinin geri dönüş değeri türü *int*
-	+tanımlanan *func* işlevinin geri dönüş değeri türü *int*
-	+*func* işlevi içinde tanımlanan *x* ve *y* değişkenlerinin türü *int*
+	- bildirilen *foo* işlevinin geri dönüş değeri türü *int*
+	- tanımlanan *func* işlevinin geri dönüş değeri türü *int*
+	- *func* işlevi içinde tanımlanan *x* ve *y* değişkenlerinin türü *int*
 
 **C dilinde aşağıdaki iki bildirim arasında önemli bir fark var:**
 
